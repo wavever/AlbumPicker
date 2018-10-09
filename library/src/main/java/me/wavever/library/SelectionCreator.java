@@ -1,53 +1,57 @@
 package me.wavever.library;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import android.provider.MediaStore;
 
 public class SelectionCreator {
 
+    private AlbumPicker mPicker;
     private Selecter mSelecter;
-    private WeakReference<Activity> mActivity;
-    private Crop mCrop;
     private boolean mIsVersionM;
-    private PermissionDispatcher mPermissionDispatcher;
+    private Intent mIntent;
+    private boolean mHasPermission = true;
 
-    SelectionCreator(Activity activity) {
-        this(activity, Selecter.ALBUM);
+    SelectionCreator(AlbumPicker picker) {
+        this(picker, Selecter.ALBUM);
     }
 
-    SelectionCreator(Activity activity, Selecter selecter) {
-        mActivity = new WeakReference<>(activity);
+    SelectionCreator(AlbumPicker picker, Selecter selecter) {
+        mPicker = picker;
         mSelecter = selecter;
-        mIsVersionM = Build.VERSION.SDK_INT >= 23;
+        mIsVersionM = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+        mIntent = new Intent();
+        if (selecter == Selecter.CAMERA && Utils.hasCamera(picker.getActivity().getPackageManager())) {
+            mIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        } else {
+            mIntent.setAction(Intent.ACTION_GET_CONTENT);
+            mIntent.setType("image/*");
+        }
     }
 
-    public SelectionCreator crop(Crop crop) {
-        mCrop = crop;
-        return this;
-    }
-
-    @TargetApi(23)
-    public SelectionCreator checkPremission(int requestCode) {
-        if (mActivity.get() != null && mIsVersionM){
-            mPermissionDispatcher = new PermissionDispatcher(mActivity.get(), requestCode, mSelecter);
+    public SelectionCreator checkPremission(int requestCode, boolean isCrop) {
+        if (mPicker.getActivity() != null && mIsVersionM
+                && !PermissionDispatcher.check(mPicker.getActivity(), mSelecter, isCrop)) {
+            mHasPermission = false;
+            PermissionDispatcher.request(mPicker.getActivity(), mSelecter, isCrop, requestCode);
         }
         return this;
+    }
+
+    public void pick(int requestCode) {
+        if (mPicker != null && mHasPermission) {
+            if (mPicker.getFragment() != null) {
+                mPicker.getFragment().startActivityForResult(mIntent, requestCode);
+            } else if (mPicker.getActivity() != null) {
+                mPicker.getActivity().startActivityForResult(mIntent, requestCode);
+            }
+        }
     }
 
     enum Selecter {
 
         ALBUM(0),
-        CAMERA(1),
-        ALL(2);
+        CAMERA(1);
 
         final int select;
 

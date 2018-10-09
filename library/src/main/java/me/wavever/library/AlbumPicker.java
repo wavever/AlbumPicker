@@ -1,6 +1,8 @@
 package me.wavever.library;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 
 import java.lang.ref.WeakReference;
@@ -23,24 +25,35 @@ public class AlbumPicker {
         return new AlbumPicker(fragment.getActivity(), fragment);
     }
 
-    private Activity getActivity() {
+    public Activity getActivity() {
         return mActivity.get();
     }
 
-    private Fragment getFragment() {
+    public Fragment getFragment() {
         return mFragment.get();
     }
 
     public SelectionCreator fromAlbum() {
-        return new SelectionCreator(getActivity());
+        return new SelectionCreator(this);
     }
 
     public SelectionCreator fromCamera() {
-        return new SelectionCreator(getActivity(), SelectionCreator.Selecter.CAMERA);
+        return new SelectionCreator(this, SelectionCreator.Selecter.CAMERA);
     }
 
-    public SelectionCreator fromAll() {
-        return new SelectionCreator(getActivity(), SelectionCreator.Selecter.ALL);
+    public void crop(Uri uri, Uri cropUri, int cropCode) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        Crop crop = new Crop();
+        crop.decorateIntent(intent, cropUri);
+        if (getFragment() != null) {
+            getFragment().startActivityForResult(intent, cropCode);
+        } else if (getActivity() != null) {
+            getActivity().startActivityForResult(intent, cropCode);
+        }
     }
 
+    public static String getFilePathFromUri(Uri uri) {
+        return Utils.getFilePathFromUri(uri);
+    }
 }
