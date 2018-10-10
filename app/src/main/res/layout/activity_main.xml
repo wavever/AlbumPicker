@@ -13,13 +13,30 @@
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        tools:src="@drawable/ic_launcher_background"/>
+        android:src="@drawable/ic_launcher_background"/>
 
-    <Button
-        android:id="@+id/pickerBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Picker" />
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/pickAlbum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="50dp"
+            android:text="Album" />
+        <Button
+            android:id="@+id/pickCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Camera" />
+    </LinearLayout>
+
+
+
+
 
 </LinearLayout>
