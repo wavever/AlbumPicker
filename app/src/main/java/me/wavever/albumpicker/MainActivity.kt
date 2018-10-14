@@ -50,15 +50,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun pickFromAlbum() {
-        AlbumPicker.pickAlbum().allow(PERMISSION_REQUEST_CODE).request(this, PICKER_REQUEST_CODE)
+        AlbumPicker.pickAlbum()
+                .allow(PERMISSION_REQUEST_CODE)
+                .request(this, PICKER_REQUEST_CODE)
     }
 
     private fun pickFromCamera() {
-        AlbumPicker.pickCamera(mPhotoUri).allow(PERMISSION_REQUEST_CODE).request(this, PICKER_REQUEST_CODE)
+        AlbumPicker.pickCamera(mPhotoUri)
+                .allow(PERMISSION_REQUEST_CODE)
+                .request(this, PICKER_REQUEST_CODE)
     }
 
     private fun crop(uri: Uri) {
-        AlbumPicker.crop(uri, mUri).allow(PERMISSION_REQUEST_CODE).request(this, CROP_REQUEST_CODE)
+        AlbumPicker.crop(uri, mUri)
+                .allow(PERMISSION_REQUEST_CODE)
+                .request(this, CROP_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
