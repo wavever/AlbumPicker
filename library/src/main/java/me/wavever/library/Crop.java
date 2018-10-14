@@ -83,7 +83,7 @@ public class Crop {
         mIsReturnData = false;
         mIsCircleCrop = false;
         mOutputFormat = Bitmap.CompressFormat.JPEG.toString();
-        mIsNoFaceDetection = false;
+        mIsNoFaceDetection = true;
     }
 
     public void decorateIntent(Intent intent, Uri data) {
@@ -98,6 +98,13 @@ public class Crop {
         intent.putExtra(OUTPUT, data);
         intent.putExtra(OUTPUT_FORMAT, mOutputFormat);
         intent.putExtra(NO_FACE_DETECTION, mIsNoFaceDetection);
+    }
+
+    public Intent buildIntent(Uri sourceUri, Uri cropUri){
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(sourceUri, "image/*");
+        decorateIntent(intent, cropUri);
+        return intent;
     }
 
     public static class Builder {

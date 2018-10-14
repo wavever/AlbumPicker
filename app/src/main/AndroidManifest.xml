@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.wavever.albumpicker">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +24,8 @@
         </activity>
 
         <provider
-            android:authorities="android.support.v4.content.FileProvider"
-            android:name="me.wavever.albumpicker.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="me.wavever.albumpicker.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
