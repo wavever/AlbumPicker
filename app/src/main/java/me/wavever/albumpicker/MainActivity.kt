@@ -12,7 +12,6 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import me.wavever.library.AlbumPicker
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
