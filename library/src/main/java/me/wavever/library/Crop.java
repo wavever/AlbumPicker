@@ -77,8 +77,8 @@ public class Crop {
         mIsCrop = "true";
         mAspectX = 1;
         mAspectY = 1;
-        mOutputX = 200;
-        mOutputY = 200;
+        mOutputX = 300;
+        mOutputY = 300;
         mIsScale = true;
         mIsReturnData = false;
         mIsCircleCrop = false;
@@ -98,13 +98,6 @@ public class Crop {
         intent.putExtra(OUTPUT, data);
         intent.putExtra(OUTPUT_FORMAT, mOutputFormat);
         intent.putExtra(NO_FACE_DETECTION, mIsNoFaceDetection);
-    }
-
-    public Intent buildIntent(Uri sourceUri, Uri cropUri){
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(sourceUri, "image/*");
-        decorateIntent(intent, cropUri);
-        return intent;
     }
 
     public static class Builder {

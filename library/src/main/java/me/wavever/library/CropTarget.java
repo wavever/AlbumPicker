@@ -1,48 +1,74 @@
 package me.wavever.library;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
 
-public class CropTarget implements ITarget {
+import java.io.File;
+import java.io.IOException;
 
-    private Intent mIntent;
+public class CropTarget extends BaseTarget {
+
     private Uri mSourceUri;
     private Uri mCropUri;
-    private PermissionDispatcher mPermissionDispatcher;
+    private File mCropFile;
 
-    CropTarget(Uri sourceUri, Uri cropUri) {
-        this(sourceUri, cropUri, new Crop());
-    }
-
-    CropTarget(Uri sourceUri, Uri cropUri, Crop crop){
-        mIntent = crop.buildIntent(sourceUri, cropUri);
-    }
-
-    @Override
-    public ITarget allow(int requestCode) {
-        mPermissionDispatcher = new PermissionDispatcher(requestCode);
+    public CropTarget uri(Context context, Uri sourceUri, Uri cropUri) {
+        mSourceUri = convertUri(context, sourceUri);
+        mCropUri = convertUri(context, cropUri);
         return this;
     }
 
-    @Override
-    public void request(Activity activity, int requestCode) {
-        if (activity != null) {
-            checkPermission(activity);
-            activity.startActivityForResult(mIntent, requestCode);
+    public CropTarget uri(Context context, Uri sourceUri) {
+        Log.d("wavever_tag", "sourceUri="+sourceUri);
+        mSourceUri = convertUri(context, sourceUri);
+        Log.d("wavever_tag", "mSourceUri="+mSourceUri);
+        File dir = new File(Environment.getExternalStorageDirectory(), File.separator+"AlbumPicker"+File.pathSeparator);
+        if(!dir.exists()){
+            dir.mkdir();
         }
+        mCropFile = new File(dir, "crop.jpg");
+        if(mCropFile.exists()){
+            mCropFile.delete();
+        }
+        try {
+            mCropFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mCropUri = Uri.fromFile(mCropFile);
+        Log.d("wavever_tag", "mCropUri="+mCropUri);
+        return this;
+    }
+
+    public CropTarget cropUri(Uri[] uri){
+        uri[0] = mCropUri;
+        return this;
+    }
+
+    public CropTarget cropFile(File[] file){
+        file[0] = mCropFile;
+        return this;
+    }
+
+    private Uri convertUri(Context context, Uri uri) {
+        if (uri != null && uri.getScheme() != null && uri.getScheme().equals("content")) {
+            String path = Utils.getFilePathFromUri(context, uri);
+            return TextUtils.isEmpty(path) ? uri : Uri.fromFile(new File(path));
+        }
+        return uri;
     }
 
     @Override
-    public void request(Fragment fragment, int requestCode) {
-        if (fragment != null) {
-            checkPermission(fragment.getActivity());
-            fragment.startActivityForResult(mIntent, requestCode);
-        }
+    Intent createIntent() {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(mSourceUri, "image/*");
+        Crop crop = new Crop();
+        crop.decorateIntent(intent, mCropUri);
+        return intent;
     }
 
-    private void checkPermission(Activity activity) {
-        mPermissionDispatcher.check(activity, Target.CROP);
-    }
 }
