@@ -2,13 +2,11 @@ package me.wavever.albumpicker
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentProvider
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import me.wavever.library.AlbumPicker
 import java.io.File

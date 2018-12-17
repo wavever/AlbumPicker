@@ -1,10 +1,11 @@
 # AlbumPicker
 
-`AlbumPicker` is a library that you can get photo from album or camera.
+`AlbumPicker` is a library that you can get photo from album or camera very easy.
 
 ## Usage
 
 ### Album
+
 ``` kotlin
 AlbumPicker.pickAlbum()
            .allow(PERMISSION_REQUEST_CODE)
@@ -12,6 +13,7 @@ AlbumPicker.pickAlbum()
 ```
 
 ### Camear
+
 ``` kotlin
 AlbumPicker.pickCamera(mPhotoUri)
            .allow(PERMISSION_REQUEST_CODE)
@@ -19,6 +21,7 @@ AlbumPicker.pickCamera(mPhotoUri)
 ```
 
 ### Crop
+
 ``` kotlin
 AlbumPicker.crop(uri, mUri)
            .allow(PERMISSION_REQUEST_CODE)
@@ -26,10 +29,12 @@ AlbumPicker.crop(uri, mUri)
 ```
 
 ## TODO 
+
 * add Permission Check.
 
 ## LICENCE
 
+```
    Copyright [2018] [wavever]
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,3 +48,4 @@ AlbumPicker.crop(uri, mUri)
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+```
