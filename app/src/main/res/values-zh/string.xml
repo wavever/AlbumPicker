@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="album_title">相册</string>
+    <string name="camera_title">相机</string>
+    <string name="pick_title">选择</string>
+</resources>

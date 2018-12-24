@@ -30,7 +30,7 @@ AlbumPicker.crop(uri, mUri)
 
 ## TODO 
 
-* add Permission Check.
+- [ ] add permission check and reques.
 
 ## LICENCE
 

@@ -14,17 +14,20 @@ public class PermissionDispatcher {
         mRequestCode = requestCode;
     }
 
-    public boolean check(Activity activity, Target target) {
-        if (target == Target.ALBUM || target == Target.CROP) {
-            if (!hasStoragePermission(activity)) {
-                request(activity, target);
-                return false;
-            }
-        } else if (target == Target.CAMERA) {
-            if (hasStoragePermission(activity) && hasCameraPermission(activity)) {
-                request(activity, target);
-                return false;
-            }
+    public boolean check(Activity activity, PickerTarget pickerTarget, boolean isCrop) {
+        switch (pickerTarget) {
+            case ALBUM:
+                if (isCrop && !hasStoragePermission(activity)) {
+                    request(activity, pickerTarget);
+                    return false;
+                }
+                break;
+            case CAMERA:
+                if (hasStoragePermission(activity) && hasCameraPermission(activity)) {
+                    request(activity, pickerTarget);
+                    return false;
+                }
+                break;
         }
         return true;
     }
@@ -39,11 +42,11 @@ public class PermissionDispatcher {
                 Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void request(Activity activity, Target target) {
-        if (target == Target.ALBUM) {
+    private void request(Activity activity, PickerTarget pickerTarget) {
+        if (pickerTarget == PickerTarget.ALBUM) {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission_group.STORAGE}, mRequestCode);
-        } else if (target == Target.CAMERA) {
+        } else if (pickerTarget == PickerTarget.CAMERA) {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission_group.STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, mRequestCode);
         } else {

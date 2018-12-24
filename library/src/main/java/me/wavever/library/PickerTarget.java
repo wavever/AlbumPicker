@@ -1,14 +1,14 @@
 package me.wavever.library;
 
-public enum Target {
+public enum PickerTarget {
+
     ALBUM(0),
-    CAMERA(1),
-    CROP(2);
+
+    CAMERA(1);
 
     final int select;
 
-    Target(int select) {
+    PickerTarget(int select) {
         this.select = select;
     }
-
 }
